@@ -3,6 +3,8 @@ import showMessage from "./message.js";
 import randomSelection from "./utils.js";
 import tools from "./tools.js";
 
+window.showMessage = showMessage;
+
 function loadWidget(config) {
   const model = new Model(config);
   localStorage.removeItem("waifu-display");
@@ -46,7 +48,7 @@ function loadWidget(config) {
         }
       }
     }
-    const text = `欢迎阅读<span>「${document.title.split(" - ")[0]}」</span>`;
+    const text = `欢迎来到<span>「${document.title.split(" - ")[0]}」</span>`;
     let from;
     if (document.referrer !== "") {
       const referrer = new URL(document.referrer),
