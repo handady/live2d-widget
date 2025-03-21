@@ -11,12 +11,6 @@ export function bindClickEvents(model) {
     const logicalX = (point.x / (model.width * model.scale.x)) * 2 - 1;
     const logicalY = (point.y / (model.height * model.scale.y)) * 2 - 1;
 
-    console.log(
-      "点击坐标（归一化）:",
-      logicalX.toFixed(2),
-      logicalY.toFixed(2)
-    );
-
     const hitAreas = model.internalModel.settings.hitAreas;
     const hitAreasCustom = model.internalModel.settings.json.hit_areas_custom;
 
@@ -56,8 +50,6 @@ export function bindClickEvents(model) {
         hitBody = true;
       }
     }
-
-    console.log("点击区域:", hitHead ? "头部" : "", hitBody ? "身体" : "");
 
     // ✅ 触发动作和提示
     if (hitHead) {
@@ -120,8 +112,6 @@ class Model {
     const modelBounds = modelData.getBounds();
     const modelWidth = modelBounds.width;
     const modelHeight = modelBounds.height;
-
-    console.log("模型原始尺寸:", modelWidth, modelHeight);
 
     // 调整 canvas 尺寸
     const canvas = document.getElementById("live2d");
