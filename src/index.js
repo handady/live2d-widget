@@ -98,11 +98,26 @@ function loadWidget(config) {
     const seasonMessages = checkSeasonEvents(result.seasons);
     seasonMessages.forEach((msg) => messageArray.push(msg)); // 加入闲聊池
 
-    const devtools = () => {};
-    console.log("%c", devtools);
-    devtools.toString = () => {
-      showMessage(result.message.console, 6000, 9);
-    };
+    // 检测用户是否打开了开发者工具
+    (function detectDevtools() {
+      let isDevtoolsOpen = false;
+
+      const threshold = 160;
+      setInterval(() => {
+        const widthThreshold =
+          window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold =
+          window.outerHeight - window.innerHeight > threshold;
+
+        if ((widthThreshold || heightThreshold) && !isDevtoolsOpen) {
+          isDevtoolsOpen = true;
+          showMessage(result.message.console, 6000, 9);
+        } else if (!widthThreshold && !heightThreshold) {
+          isDevtoolsOpen = false;
+        }
+      }, 1000);
+    })();
+
     window.addEventListener("copy", () => {
       showMessage(result.message.copy, 6000, 9);
     });
