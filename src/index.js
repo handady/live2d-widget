@@ -2,6 +2,7 @@ import Model from "./localmodelpixi.js";
 import showMessage from "./message.js";
 import randomSelection from "./utils.js";
 import tools from "./tools.js";
+import { startTimeAnnouncer, checkSeasonEvents } from "./functions/index.js";
 
 window.showMessage = showMessage;
 
@@ -37,17 +38,6 @@ function loadWidget(config) {
   })();
 
   function welcomeMessage(time) {
-    if (location.pathname === "/") {
-      // 如果是主页
-      for (let { hour, text } of time) {
-        const now = new Date(),
-          after = hour.split("-")[0],
-          before = hour.split("-")[1] || after;
-        if (after <= now.getHours() && now.getHours() <= before) {
-          return text;
-        }
-      }
-    }
     const text = `欢迎来到<span>「${document.title.split(" - ")[0]}」</span>`;
     let from;
     if (document.referrer !== "") {
@@ -104,21 +94,8 @@ function loadWidget(config) {
         return;
       }
     });
-    result.seasons.forEach(({ date, text }) => {
-      const now = new Date(),
-        after = date.split("-")[0],
-        before = date.split("-")[1] || after;
-      if (
-        after.split("/")[0] <= now.getMonth() + 1 &&
-        now.getMonth() + 1 <= before.split("/")[0] &&
-        after.split("/")[1] <= now.getDate() &&
-        now.getDate() <= before.split("/")[1]
-      ) {
-        text = randomSelection(text);
-        text = text.replace("{year}", now.getFullYear());
-        messageArray.push(text);
-      }
-    });
+    const seasonMessages = checkSeasonEvents(result.seasons);
+    seasonMessages.forEach((msg) => messageArray.push(msg)); // 加入闲聊池
 
     const devtools = () => {};
     console.log("%c", devtools);
@@ -132,6 +109,11 @@ function loadWidget(config) {
       if (!document.hidden)
         showMessage(result.message.visibilitychange, 6000, 9);
     });
+
+    // 时间段问候
+    if (Array.isArray(result.time)) {
+      startTimeAnnouncer(result.time);
+    }
   }
 
   (function initModel() {
