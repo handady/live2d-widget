@@ -38,7 +38,7 @@ function loadWidget(config) {
   })();
 
   function welcomeMessage(time) {
-    const text = `欢迎来到<span>「${document.title.split(" - ")[0]}」</span>`;
+    const text = `欢迎来到<span>「${document.title.split(" - ")[0]}」</span>～`;
     let from;
     if (document.referrer !== "") {
       const referrer = new URL(document.referrer),
@@ -72,16 +72,17 @@ function loadWidget(config) {
       } else if (!userActionTimer) {
         userActionTimer = setInterval(() => {
           showMessage(messageArray, 6000, 9);
-        }, 20000);
+        }, 30000);
       }
     }, 1000);
     showMessage(welcomeMessage(result.time), 7000, 11);
     window.addEventListener("mouseover", (event) => {
-      for (let { selector, text } of result.mouseover) {
+      for (let { selector, text, zIndex } of result.mouseover) {
         if (!event.target.matches(selector)) continue;
         text = randomSelection(text);
         text = text.replace("{text}", event.target.innerText);
-        showMessage(text, 4000, 8);
+        zIndex = zIndex || 8;
+        showMessage(text, 4000, zIndex);
         return;
       }
     });
