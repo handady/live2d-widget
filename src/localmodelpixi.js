@@ -4,7 +4,7 @@ import { bindClickEvents } from "./functions/index.js";
 class Model {
   constructor(config) {
     let { models, app } = config;
-    this.modelBasePath = "/live2d/models/"; // 本地模型目录
+    this.modelBasePath = "./live2d/models/"; // 本地模型目录
     this.models = models;
     this.app = app;
     this.currentModel = null; // 存储当前模型对象
